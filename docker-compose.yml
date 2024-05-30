@@ -1,24 +1,37 @@
+# Telling docker what version of the docker-compose file we are using
 version: "3.8"
 
+# Defining the services that we are going to use
 services:
+  # Defining the database service, in this case it's postgres
   db:
+    # Using the latest version of the postgres image
     image: postgres:latest
+    # Setting the environment variables for the postgres database
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: django_db
+    # Telling docker to save our database data in a specific place (postgres_data)
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  # Defining the web service, in this case it's a python web server
   web:
+    # Building the image from the current directory (build: .)
     build: .
+    # Telling docker to run the command python blog_project/manage.py runserver
     command: python blog_project/manage.py runserver 0.0.0.0:8000
+    # Telling docker to take our current directory and make it available in the container
     volumes:
       - .:/code
+    # Telling docker to expose the port 8000
     ports:
       - "8000:8000"
+    # Telling docker to wait for the db service to be ready before starting the web service
     depends_on:
       - db
 
+# Defining the specific place (postgres_data) where our database data will be stored.
 volumes:
   postgres_data: {}
