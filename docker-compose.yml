@@ -1,5 +1,5 @@
 # Telling docker what version of the docker-compose file we are using
-version: "3.8"
+# version: "3.8"
 
 # Defining the services that we are going to use
 services:
@@ -34,4 +34,4 @@ services:
 
 # Defining the specific place (postgres_data) where our database data will be stored.
 volumes:
-  postgres_data: {}
+  postgres_data:
