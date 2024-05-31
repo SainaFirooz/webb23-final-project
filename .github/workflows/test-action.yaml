@@ -2,7 +2,10 @@
 name: Test Action Workflow
 
 # detta körs varje gång man gör en pull request
-on: [pull_request]
+on:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -23,36 +26,19 @@ jobs:
         ports:
           # port 5432 på localhost kommer att vidarebefordras till port 5432 i containern
           - 5432:5432
+
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.10
+          python-version: "3.10"
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
-      - name: Wait for PostgreSQL to start
-        run: |
-          until PGPASSWORD=postgres psql -h localhost -U postgres -c '\q'; do
-            sleep 1
-          done
       - name: Run Migrations
         run: |
           python blog_project/manage.py migrate
       - name: Run Tests
         run: |
           python blog_project/manage.py test
-          
-    # steps: # stegen som körs i jobbet
-    #   - uses: actions/checkout@v4
-    #   - name: Install Python
-    #     run: |
-    #       pipx install poetry --python python3.10
-    #   - name: Install Dependencies
-    #     run: |
-    #       pip install -r requirements.txt
-    #   - name: Run Tests
-    #     run: |
-    #       python blog_project/manage.py migrate
-    #       python blog_project/manage.py test
