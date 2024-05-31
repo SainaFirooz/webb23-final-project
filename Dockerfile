@@ -8,14 +8,10 @@ WORKDIR /app
 
 # kopierar filen requirements.txt till /app mappen i containern
 # . refererar till /app mappen
-COPY requirements.txt .
-
+COPY . .
 
 # kör pip install för att installera alla nödvändiga Python paket som specificeras i requirements.txt
 RUN pip install -r requirements.txt 
-
-# Kopierar hela projektet in i containern 
-COPY . .
 
 # containern kommer att lyssna på port 8000 vid körning
 EXPOSE 8000
