@@ -12,18 +12,20 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: django_db
-    # Telling docker to save our database data in a specific place (postgres_data)
+    # Defines where Docker should store the data for the Postgres database
     volumes:
+      # The data from the Postgres database is stored in a Docker volume named postgres_data
       - postgres_data:/var/lib/postgresql/data
 
   # Defining the web service, in this case it's a python web server
   web:
-    # Building the image from the current directory (build: .)
+    # Building the image from the current directory
     build: .
-    # Telling docker to run the command python blog_project/manage.py runserver
+    # The command Docker will run to start the web server
     command: python blog_project/manage.py runserver 0.0.0.0:8000
-    # Telling docker to take our current directory and make it available in the container
+    # Defines where Docker should store the code for the web server
     volumes:
+      # The code from the current directory on the host is made available in the /code directory in the container
       - .:/code
     # Telling docker to expose the port 8000
     ports:
@@ -32,6 +34,6 @@ services:
     depends_on:
       - db
 
-# Defining the specific place (postgres_data) where our database data will be stored.
+# Defines the Docker volumes used in this Docker Compose file
 volumes:
   postgres_data:
