@@ -1,30 +1,44 @@
+# namnet på vår github actions arbetsflöde
 name: Test Action Workflow
 
-on: [pull_request]
+# detta körs varje gång man gör en pull request
+on:
+  pull_request:
+    branches:
+      - "main"
 
 jobs:
   build:
+    # jobbet körs på den senaste versionen av Ubuntu
     runs-on: ubuntu-latest
     strategy:
+      # maximalt 4 jobb kommer att köras parallellt
       max-parallel: 4
     services:
       db:
+        # använder postgres image
         image: postgres
         env:
+          # sätter upp environment variabler för postgres
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: django_db
         ports:
+          # port 5432 på localhost kommer att vidarebefordras till port 5432 i containern
           - 5432:5432
+
     steps:
       - uses: actions/checkout@v4
-      - name: Install Python
-        run: |
-          pipx install poetry --python python3.10
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
-      - name: Run Tests
+      - name: Run Migrations
         run: |
           python blog_project/manage.py migrate
+      - name: Run Tests
+        run: |
           python blog_project/manage.py test

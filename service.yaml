@@ -1,13 +1,13 @@
-apiVersion: v1
-kind: Service
+apiVersion: v1 # vi använder version 1 av Kubernetes API
+kind: Service # typen av Kubernetes objekt vi skapar är en service
 metadata:
-  name: blog-project-service
+  name: blog-project-service # namnet på vår service
 spec:
-  selector:
-    app: blog-project
+  selector: # selector bestämmer vilka pods som kommer att användas av vår service
+    app: blog-project # välj pods med etiketten "app: blog-project"
   ports:
-    - protocol: TCP
-      port: 8000
-      targetPort: 8000
-      nodePort: 30081
-  type: NodePort
+    - protocol: TCP # TCP är protokollet som används
+      port: 8000 # porten som vår service kommer att lyssna på
+      targetPort: 8000 # trafiken kommer att vidarebefordras till port 8000
+      nodePort: 30080 # den specifika porten på noderna som trafiken vidarebefordras till (för NodePort)
+  type: NodePort # typen av service, i detta fall NodePort

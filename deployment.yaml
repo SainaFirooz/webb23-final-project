@@ -1,22 +1,22 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1 # API versionen som används för Deployment
+kind: Deployment # typen av Kubernetes-objekt, i detta fall en deployment
 metadata:
-  name: blog-project-deployment
+  name: blog-project-deployment # namnet på deployment objektet
   labels:
-    app: blog-project
+    app: blog-project # metadata labels för att identifiera objektet
 spec:
-  replicas: 1
+  replicas: 1 # antalet repliker (pods) som ska köras
   selector:
     matchLabels:
-      app: blog-project
+      app: blog-project # etikett som pods måste matcha för att tillhöra denna deployment
   template:
     metadata:
       labels:
-        app: blog-project
+        app: blog-project # etikett som appliceras på Pods
     spec:
       containers:
-      - name: blog-project
-        image: snoira/blog-project:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8000
+        - name: blog-project
+          image: snoira/blog-project:latest # docker bilden som används för containern
+          imagePullPolicy: Always # alltid hämta den senaste versionen av bilden
+          ports:
+            - containerPort: 8000 # port som containern lyssnar på
